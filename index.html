@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GlowBook — Mockup Navegável</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #F0EDE8;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 60px;
+    gap: 16px;
+  }
+
+  /* ── TITLE ── */
+  .app-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #7A6E65;
+  }
+
+  /* ── SCREEN INDICATOR ── */
+  .screen-indicator {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .screen-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #D4C9C4;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .screen-dot.active {
+    background: #C8737A;
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  /* ── PHONE SHELL ── */
+  .phone {
+    width: 360px;
+    background: #fff;
+    border-radius: 44px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+    position: relative;
+    border: 3px solid #222;
+  }
+
+  /* Status bar */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 24px 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #111;
+    background: #fff;
+  }
+  .status-bar.dark { background: #3D2B2E; color: #fff; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+
+  /* Screen wrapper */
+  .screens-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+  .screen {
+    display: none;
+    background: #FAFAF8;
+    min-height: 680px;
+    animation: fadeIn 0.2s ease;
+  }
+  .screen.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(12px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ── COLORS ── */
+  :root {
+    --rose: #C8737A;
+    --rose-light: #F7ECEC;
+    --rose-dark: #A55560;
+    --cream: #FAF7F4;
+    --text: #1C1917;
+    --muted: #7A6E65;
+    --border: #EDE9E5;
+    --gold: #C9A96E;
+  }
+
+  /* ── NAV BAR ── */
+  .nav-bar {
+    background: #fff;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 14px;
+    border-top: 1px solid var(--border);
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .nav-item:hover { color: var(--rose); }
+  .nav-item.active { color: var(--rose); }
+  .nav-item .icon { font-size: 20px; }
+  .nav-dot {
+    width: 5px; height: 5px;
+    background: var(--rose);
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+
+  /* Clickable elements */
+  .clickable {
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .clickable:hover { opacity: 0.82; }
+  .clickable:active { transform: scale(0.97); }
+
+  /* ── TYPOGRAPHY ── */
+  .screen-title { font-size: 22px; font-weight: 700; color: var(--text); }
+  .section-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+
+  /* ── SCREEN LABEL ── */
+  .screen-tag {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rose);
+  }
+
+  /* ════════════ SCREEN 1 — HOME ════════════ */
+  .s1-header {
+    background: linear-gradient(160deg, #3D2B2E 0%, #6B3A42 100%);
+    padding: 20px 22px 28px;
+    color: #fff;
+  }
+  .s1-greeting { font-size: 13px; opacity: 0.7; margin-bottom: 4px; }
+  .s1-name { font-size: 21px; font-weight: 700; margin-bottom: 18px; }
+  .s1-next-card {
+    background: rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .s1-next-card:hover { background: rgba(255,255,255,0.18); }
+  .s1-next-icon {
+    width: 44px; height: 44px;
+    background: var(--rose);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .s1-next-label { font-size: 10px; opacity: 0.65; margin-bottom: 2px; }
+  .s1-next-title { font-size: 14px; font-weight: 700; }
+  .s1-next-sub { font-size: 11px; opacity: 0.75; margin-top: 1px; }
+  .s1-next-btn {
+    margin-left: auto;
+    background: #fff;
+    color: var(--rose-dark);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .s1-body { padding: 20px 20px 8px; }
+  .s1-cats { display: flex; gap: 10px; margin-bottom: 24px; }
+  .s1-cat {
+    flex: 1;
+    background: #fff;
+    border-radius: 16px;
+    padding: 14px 10px;
+    text-align: center;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .s1-cat:hover { border-color: var(--rose); }
+  .s1-cat .ico { font-size: 26px; margin-bottom: 6px; }
+  .s1-cat .lbl { font-size: 11px; font-weight: 600; color: var(--text); }
+  .s1-cat.active-cat { background: var(--rose-light); border-color: var(--rose); }
+  .s1-cat.active-cat .lbl { color: var(--rose-dark); }
+  .s1-profs { display: flex; flex-direction: column; gap: 10px; }
+  .prof-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: box-shadow 0.15s, border-color 0.15s;
+  }
+  .prof-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: var(--rose); }
+  .prof-avatar {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    font-size: 22px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .prof-name { font-size: 14px; font-weight: 700; color: var(--text); }
+  .prof-spec { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .prof-stars { font-size: 11px; color: var(--gold); margin-top: 3px; }
+  .prof-avail {
+    margin-left: auto;
+    background: #EDFAF3;
+    color: #2D7A56;
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ════════════ SCREEN 2 — SERVIÇOS ════════════ */
+  .s2-topbar {
+    background: #fff;
+    padding: 16px 20px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .back-btn {
+    width: 34px; height: 34px;
+    background: var(--cream);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .back-btn:hover { background: var(--rose-light); }
+  .s2-prof-mini { display: flex; align-items: center; gap: 10px; }
+  .s2-av { width: 38px; height: 38px; border-radius: 10px; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+  .s2-prof-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .s2-prof-sub { font-size: 11px; color: var(--muted); }
+  .s2-body { padding: 18px 20px 0; }
+  .filter-chips { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+    color: var(--muted);
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .chip:hover { border-color: var(--rose); color: var(--rose); }
+  .chip.active { background: var(--rose); border-color: var(--rose); color: #fff; }
+  .service-list { display: flex; flex-direction: column; gap: 10px; }
+  .service-item {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .service-item:hover { border-color: var(--rose); }
+  .svc-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: var(--rose-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .svc-name { font-size: 14px; font-weight: 700; color: var(--text); }
+  .svc-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .svc-price { margin-left: auto; font-size: 15px; font-weight: 800; color: var(--rose-dark); flex-shrink: 0; }
+  .svc-sel {
+    width: 24px; height: 24px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+    transition: all 0.15s;
+  }
+  .svc-sel.checked { background: var(--rose); border-color: var(--rose); color: #fff; }
+  .s2-footer {
+    background: #fff;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .s2-total-label { font-size: 12px; color: var(--muted); }
+  .s2-total-val { font-size: 18px; font-weight: 800; color: var(--text); margin-top: 2px; }
+  .btn-primary {
+    background: var(--rose);
+    color: #fff;
+    border-radius: 14px;
+    padding: 13px 24px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-primary:hover { background: var(--rose-dark); }
+  .btn-primary:active { transform: scale(0.97); }
+
+  /* ════════════ SCREEN 3 — HORÁRIO ════════════ */
+  .s3-header { background: #fff; padding: 16px 20px 14px; border-bottom: 1px solid var(--border); }
+  .s3-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 14px; }
+  .calendar-strip { display: flex; gap: 8px; overflow: hidden; }
+  .cal-day {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .cal-day:hover { border-color: var(--rose); }
+  .cal-day .dow { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; }
+  .cal-day .num { font-size: 16px; font-weight: 800; color: var(--text); margin: 3px 0; }
+  .cal-day .dot { width: 5px; height: 5px; border-radius: 50%; background: transparent; margin: 0 auto; }
+  .cal-day.active { background: var(--rose); border-color: var(--rose); }
+  .cal-day.active .dow, .cal-day.active .num { color: #fff; }
+  .cal-day.active .dot { background: rgba(255,255,255,0.6); }
+  .cal-day.has-slot .dot { background: var(--gold); }
+  .s3-body { padding: 18px 20px 0; }
+  .slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+  .slot {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 6px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .slot:hover:not(.taken) { border-color: var(--rose); color: var(--rose); }
+  .slot.taken { background: #F5F5F5; color: #BDBDBD; text-decoration: line-through; border-color: #F0F0F0; cursor: default; }
+  .slot.selected { background: var(--rose); border-color: var(--rose); color: #fff; }
+  .s3-summary {
+    background: var(--rose-light);
+    border-radius: 16px;
+    padding: 14px 16px;
+    border: 1px solid #EAC8CA;
+    margin-bottom: 16px;
+  }
+  .s3-sum-row { display: flex; justify-content: space-between; align-items: center; }
+  .s3-sum-label { font-size: 11px; color: var(--muted); }
+  .s3-sum-val { font-size: 13px; font-weight: 700; color: var(--text); }
+  .s3-sum-divider { border: none; border-top: 1px dashed #DEC5C6; margin: 10px 0; }
+  .s3-footer { background: #fff; padding: 14px 20px 18px; border-top: 1px solid var(--border); }
+  .btn-full {
+    background: var(--rose);
+    color: #fff;
+    border-radius: 14px;
+    padding: 15px;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-full:hover { background: var(--rose-dark); }
+  .btn-full:active { transform: scale(0.98); }
+
+  /* ════════════ SCREEN 4 — CONFIRMAÇÃO ════════════ */
+  .s4-screen { background: #fff; }
+  .s4-top {
+    background: linear-gradient(160deg, #3D2B2E 0%, #6B3A42 100%);
+    padding: 32px 20px 48px;
+    text-align: center;
+  }
+  .s4-check {
+    width: 72px; height: 72px;
+    background: #27AE60;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    margin: 0 auto 16px;
+    border: 4px solid rgba(255,255,255,0.3);
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  @keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .s4-booked { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+  .s4-sub { font-size: 13px; color: rgba(255,255,255,0.7); }
+  .s4-card {
+    margin: -28px 20px 20px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .s4-card-header {
+    background: var(--rose-light);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #EAC8CA;
+  }
+  .s4-av { width: 44px; height: 44px; border-radius: 12px; font-size: 22px; display: flex; align-items: center; justify-content: center; background: #fff; }
+  .s4-prof-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .s4-prof-spec { font-size: 11px; color: var(--muted); }
+  .s4-details { padding: 16px 18px; }
+  .s4-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .s4-row:last-child { border-bottom: none; }
+  .s4-row-label { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .s4-row-val { font-size: 13px; font-weight: 700; color: var(--text); }
+  .s4-row-val.price { color: var(--rose-dark); font-size: 16px; }
+  .s4-actions { padding: 0 20px 20px; display: flex; flex-direction: column; gap: 10px; }
+  .btn-outline {
+    border: 1.5px solid var(--rose);
+    color: var(--rose);
+    border-radius: 14px;
+    padding: 13px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-outline:hover { background: var(--rose-light); }
+  .btn-ghost { text-align: center; font-size: 13px; color: var(--muted); font-weight: 600; padding: 8px; cursor: pointer; }
+  .btn-ghost:hover { color: #E74C3C; }
+
+  /* ════════════ SCREEN 5 — AGENDAMENTOS ════════════ */
+  .s5-header { background: #fff; padding: 18px 20px 14px; border-bottom: 1px solid var(--border); }
+  .s5-tabs { display: flex; gap: 0; margin-top: 14px; border-bottom: 2px solid var(--border); }
+  .s5-tab {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .s5-tab:hover { color: var(--rose); }
+  .s5-tab.active { color: var(--rose); border-bottom: 2px solid var(--rose); margin-bottom: -2px; }
+  .s5-body { padding: 16px 20px 0; }
+  .appt-card { background: #fff; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 12px; overflow: hidden; cursor: pointer; transition: box-shadow 0.15s; }
+  .appt-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .appt-stripe { height: 4px; background: var(--rose); }
+  .appt-stripe.gold { background: var(--gold); }
+  .appt-stripe.gray { background: #D0D0D0; }
+  .appt-inner { padding: 14px 16px; }
+  .appt-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .appt-svc { font-size: 15px; font-weight: 700; color: var(--text); }
+  .appt-prof { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .badge { border-radius: 20px; padding: 4px 10px; font-size: 10px; font-weight: 700; }
+  .badge.confirmed { background: #EDFAF3; color: #2D7A56; }
+  .badge.pending { background: #FFF8E1; color: #B07D00; }
+  .badge.done { background: #F0F0F0; color: #888; }
+  .appt-meta { display: flex; gap: 14px; }
+  .appt-meta-item { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+  .appt-footer { border-top: 1px solid var(--border); padding: 10px 16px; display: flex; justify-content: space-between; }
+  .appt-action { font-size: 12px; font-weight: 600; color: var(--rose); cursor: pointer; }
+  .appt-action:hover { text-decoration: underline; }
+  .appt-action.cancel { color: #E74C3C; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1C1917;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 999;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="app-title">GlowBook — Mockup Navegável</div>
+
+<div class="screen-indicator">
+  <div class="screen-dot active" onclick="goTo(1)"></div>
+  <div class="screen-dot" onclick="goTo(2)"></div>
+  <div class="screen-dot" onclick="goTo(3)"></div>
+  <div class="screen-dot" onclick="goTo(4)"></div>
+  <div class="screen-dot" onclick="goTo(5)"></div>
+</div>
+
+<div class="screen-tag" id="screen-label">Tela 1 — Início</div>
+
+<div class="phone">
+
+  <!-- STATUS BAR (dinâmica) -->
+  <div class="status-bar" id="status-bar">
+    <span id="status-time">9:41</span>
+    <div class="status-icons"><span>●●●</span><span>WiFi</span><span>🔋</span></div>
+  </div>
+
+  <div class="screens-wrapper">
+
+    <!-- ══ TELA 1: HOME ══ -->
+    <div class="screen active" id="screen-1">
+      <div class="s1-header">
+        <div class="s1-greeting">Olá, Ana 👋</div>
+        <div class="s1-name">O que vamos fazer hoje?</div>
+        <div class="s1-next-card clickable" onclick="goTo(5)">
+          <div class="s1-next-icon">✂️</div>
+          <div>
+            <div class="s1-next-label">PRÓXIMO AGENDAMENTO</div>
+            <div class="s1-next-title">Corte + Escova</div>
+            <div class="s1-next-sub">Sexta, 27 Jun • 14:00 • Camila</div>
+          </div>
+          <div class="s1-next-btn">Ver</div>
+        </div>
+      </div>
+
+      <div class="s1-body">
+        <div class="section-label">Serviços</div>
+        <div class="s1-cats">
+          <div class="s1-cat active-cat" onclick="selectCat(this)">
+            <div class="ico">✂️</div><div class="lbl">Cabelo</div>
+          </div>
+          <div class="s1-cat" onclick="selectCat(this)">
+            <div class="ico">💅</div><div class="lbl">Unhas</div>
+          </div>
+          <div class="s1-cat" onclick="selectCat(this)">
+            <div class="ico">✨</div><div class="lbl">Estética</div>
+          </div>
+          <div class="s1-cat" onclick="selectCat(this)">
+            <div class="ico">🧖</div><div class="lbl">Spa</div>
+          </div>
+        </div>
+
+        <div class="section-label">Profissionais disponíveis</div>
+        <div class="s1-profs">
+          <div class="prof-card" onclick="goTo(2)">
+            <div class="prof-avatar" style="background:#FDEBD0;">👩</div>
+            <div>
+              <div class="prof-name">Camila Rocha</div>
+              <div class="prof-spec">Cabelo • Coloração</div>
+              <div class="prof-stars">★★★★★ 4.9</div>
+            </div>
+            <div class="prof-avail">Hoje livre</div>
+          </div>
+          <div class="prof-card" onclick="goTo(2)">
+            <div class="prof-avatar" style="background:#E8D5F5;">🧑</div>
+            <div>
+              <div class="prof-name">Beatriz Lima</div>
+              <div class="prof-spec">Unhas • Nail Art</div>
+              <div class="prof-stars">★★★★☆ 4.7</div>
+            </div>
+            <div class="prof-avail">Amanhã</div>
+          </div>
+          <div class="prof-card" onclick="goTo(2)">
+            <div class="prof-avatar" style="background:#D5EAF5;">👩</div>
+            <div>
+              <div class="prof-name">Fernanda Costa</div>
+              <div class="prof-spec">Estética • Sobrancelha</div>
+              <div class="prof-stars">★★★★★ 5.0</div>
+            </div>
+            <div class="prof-avail">Hoje livre</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:16px"></div>
+      <div class="nav-bar">
+        <div class="nav-item active" onclick="goTo(1)"><div class="icon">🏠</div><span>Início</span><div class="nav-dot"></div></div>
+        <div class="nav-item" onclick="showToast('🔍 Busca em breve!')"><div class="icon">🔍</div><span>Buscar</span></div>
+        <div class="nav-item" onclick="goTo(5)"><div class="icon">📅</div><span>Agenda</span></div>
+        <div class="nav-item" onclick="showToast('👤 Perfil em breve!')"><div class="icon">👤</div><span>Perfil</span></div>
+      </div>
+    </div>
+
+    <!-- ══ TELA 2: SERVIÇOS ══ -->
+    <div class="screen" id="screen-2">
+      <div class="s2-topbar">
+        <div class="back-btn" onclick="goTo(1)">←</div>
+        <div class="s2-prof-mini">
+          <div class="s2-av" style="background:#FDEBD0;">👩</div>
+          <div>
+            <div class="s2-prof-name">Camila Rocha</div>
+            <div class="s2-prof-sub">★ 4.9 • Cabelo & Coloração</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s2-body">
+        <div class="section-label">Escolha os serviços</div>
+        <div class="filter-chips">
+          <div class="chip active" onclick="selectChip(this)">Todos</div>
+          <div class="chip" onclick="selectChip(this)">Corte</div>
+          <div class="chip" onclick="selectChip(this)">Coloração</div>
+          <div class="chip" onclick="selectChip(this)">Tratamento</div>
+        </div>
+
+        <div class="service-list">
+          <div class="service-item" onclick="toggleService(this)">
+            <div class="svc-icon">✂️</div>
+            <div><div class="svc-name">Corte feminino</div><div class="svc-meta">⏱ 45 min</div></div>
+            <div class="svc-price">R$ 80</div>
+            <div class="svc-sel checked">✓</div>
+          </div>
+          <div class="service-item" onclick="toggleService(this)">
+            <div class="svc-icon">💨</div>
+            <div><div class="svc-name">Escova progressiva</div><div class="svc-meta">⏱ 90 min</div></div>
+            <div class="svc-price">R$ 180</div>
+            <div class="svc-sel checked">✓</div>
+          </div>
+          <div class="service-item" onclick="toggleService(this)">
+            <div class="svc-icon">🎨</div>
+            <div><div class="svc-name">Coloração raiz</div><div class="svc-meta">⏱ 60 min</div></div>
+            <div class="svc-price">R$ 120</div>
+            <div class="svc-sel"></div>
+          </div>
+          <div class="service-item" onclick="toggleService(this)">
+            <div class="svc-icon">💆</div>
+            <div><div class="svc-name">Hidratação profunda</div><div class="svc-meta">⏱ 30 min</div></div>
+            <div class="svc-price">R$ 90</div>
+            <div class="svc-sel"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:12px"></div>
+      <div class="s2-footer">
+        <div>
+          <div class="s2-total-label" id="svc-count">2 serviços • 2h 15min</div>
+          <div class="s2-total-val" id="svc-total">R$ 260,00</div>
+        </div>
+        <div class="btn-primary" onclick="goTo(3)">Escolher horário →</div>
+      </div>
+
+      <div class="nav-bar">
+        <div class="nav-item" onclick="goTo(1)"><div class="icon">🏠</div><span>Início</span></div>
+        <div class="nav-item" onclick="showToast('🔍 Busca em breve!')"><div class="icon">🔍</div><span>Buscar</span></div>
+        <div class="nav-item active" onclick="goTo(5)"><div class="icon">📅</div><span>Agenda</span><div class="nav-dot"></div></div>
+        <div class="nav-item" onclick="showToast('👤 Perfil em breve!')"><div class="icon">👤</div><span>Perfil</span></div>
+      </div>
+    </div>
+
+    <!-- ══ TELA 3: HORÁRIO ══ -->
+    <div class="screen" id="screen-3">
+      <div class="s3-header">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div class="back-btn" onclick="goTo(2)">←</div>
+          <div class="s3-title" style="margin-bottom:0">Escolha a data e horário</div>
+        </div>
+        <div class="calendar-strip">
+          <div class="cal-day" onclick="selectDay(this)"><div class="dow">SEG</div><div class="num">23</div><div class="dot"></div></div>
+          <div class="cal-day" onclick="selectDay(this)"><div class="dow">TER</div><div class="num">24</div><div class="dot"></div></div>
+          <div class="cal-day has-slot" onclick="selectDay(this)"><div class="dow">QUA</div><div class="num">25</div><div class="dot"></div></div>
+          <div class="cal-day active" onclick="selectDay(this)"><div class="dow">QUI</div><div class="num">26</div><div class="dot"></div></div>
+          <div class="cal-day has-slot" onclick="selectDay(this)"><div class="dow">SEX</div><div class="num">27</div><div class="dot"></div></div>
+          <div class="cal-day" onclick="selectDay(this)"><div class="dow">SÁB</div><div class="num">28</div><div class="dot"></div></div>
+        </div>
+      </div>
+
+      <div class="s3-body">
+        <div class="section-label">Horários disponíveis — <span id="day-label">Qui, 26 Jun</span></div>
+        <div class="slots-grid">
+          <div class="slot taken">08:00</div>
+          <div class="slot" onclick="selectSlot(this)">09:00</div>
+          <div class="slot taken">10:00</div>
+          <div class="slot" onclick="selectSlot(this)">11:00</div>
+          <div class="slot selected" onclick="selectSlot(this)">14:00</div>
+          <div class="slot" onclick="selectSlot(this)">15:00</div>
+          <div class="slot taken">16:00</div>
+          <div class="slot" onclick="selectSlot(this)">17:00</div>
+          <div class="slot" onclick="selectSlot(this)">18:00</div>
+        </div>
+
+        <div class="s3-summary">
+          <div class="s3-sum-row"><span class="s3-sum-label">Profissional</span><span class="s3-sum-val">Camila Rocha</span></div>
+          <hr class="s3-sum-divider">
+          <div class="s3-sum-row"><span class="s3-sum-label">Serviços</span><span class="s3-sum-val">Corte + Escova</span></div>
+          <hr class="s3-sum-divider">
+          <div class="s3-sum-row"><span class="s3-sum-label">Data e hora</span><span class="s3-sum-val" id="selected-time">Qui, 26 Jun • 14:00</span></div>
+          <hr class="s3-sum-divider">
+          <div class="s3-sum-row"><span class="s3-sum-label">Duração estimada</span><span class="s3-sum-val">~2h 15min</span></div>
+        </div>
+      </div>
+
+      <div class="s3-footer">
+        <div class="btn-full" onclick="goTo(4)">Confirmar agendamento</div>
+      </div>
+
+      <div class="nav-bar">
+        <div class="nav-item" onclick="goTo(1)"><div class="icon">🏠</div><span>Início</span></div>
+        <div class="nav-item" onclick="showToast('🔍 Busca em breve!')"><div class="icon">🔍</div><span>Buscar</span></div>
+        <div class="nav-item active"><div class="icon">📅</div><span>Agenda</span><div class="nav-dot"></div></div>
+        <div class="nav-item" onclick="showToast('👤 Perfil em breve!')"><div class="icon">👤</div><span>Perfil</span></div>
+      </div>
+    </div>
+
+    <!-- ══ TELA 4: CONFIRMAÇÃO ══ -->
+    <div class="screen s4-screen" id="screen-4">
+      <div class="s4-top">
+        <div class="s4-check">✓</div>
+        <div class="s4-booked">Agendamento confirmado!</div>
+        <div class="s4-sub">Você receberá um lembrete 1h antes</div>
+      </div>
+
+      <div class="s4-card">
+        <div class="s4-card-header">
+          <div class="s4-av">👩</div>
+          <div>
+            <div class="s4-prof-name">Camila Rocha</div>
+            <div class="s4-prof-spec">Cabelo • Coloração</div>
+          </div>
+        </div>
+        <div class="s4-details">
+          <div class="s4-row"><span class="s4-row-label">📅 Data</span><span class="s4-row-val">Qui, 26 de Junho</span></div>
+          <div class="s4-row"><span class="s4-row-label">🕑 Horário</span><span class="s4-row-val">14:00 — ~16:15</span></div>
+          <div class="s4-row"><span class="s4-row-label">✂️ Serviços</span><span class="s4-row-val">Corte + Escova</span></div>
+          <div class="s4-row"><span class="s4-row-label">📍 Local</span><span class="s4-row-val">Salão GlowBook</span></div>
+          <div class="s4-row"><span class="s4-row-label">💳 Total</span><span class="s4-row-val price">R$ 260,00</span></div>
+        </div>
+      </div>
+
+      <div class="s4-actions">
+        <div class="btn-primary" style="text-align:center;border-radius:14px;padding:14px;" onclick="showToast('📅 Adicionado ao calendário!')">Adicionar ao calendário</div>
+        <div class="btn-outline" onclick="showToast('💬 Abrindo WhatsApp...')">Compartilhar no WhatsApp</div>
+        <div class="btn-ghost" onclick="goTo(5)">Ver meus agendamentos</div>
+      </div>
+
+      <div class="nav-bar">
+        <div class="nav-item" onclick="goTo(1)"><div class="icon">🏠</div><span>Início</span></div>
+        <div class="nav-item" onclick="showToast('🔍 Busca em breve!')"><div class="icon">🔍</div><span>Buscar</span></div>
+        <div class="nav-item active" onclick="goTo(5)"><div class="icon">📅</div><span>Agenda</span><div class="nav-dot"></div></div>
+        <div class="nav-item" onclick="showToast('👤 Perfil em breve!')"><div class="icon">👤</div><span>Perfil</span></div>
+      </div>
+    </div>
+
+    <!-- ══ TELA 5: AGENDAMENTOS ══ -->
+    <div class="screen" id="screen-5">
+      <div class="s5-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="back-btn" onclick="goTo(1)">←</div>
+          <div class="screen-title">Meus agendamentos</div>
+        </div>
+        <div class="s5-tabs">
+          <div class="s5-tab active" onclick="selectTab(this)">Próximos</div>
+          <div class="s5-tab" onclick="selectTab(this)">Histórico</div>
+          <div class="s5-tab" onclick="selectTab(this)">Cancelados</div>
+        </div>
+      </div>
+
+      <div class="s5-body">
+        <div class="appt-card" onclick="showToast('📋 Detalhes do agendamento')">
+          <div class="appt-stripe"></div>
+          <div class="appt-inner">
+            <div class="appt-top">
+              <div><div class="appt-svc">Corte + Escova</div><div class="appt-prof">👩 Camila Rocha</div></div>
+              <div class="badge confirmed">Confirmado</div>
+            </div>
+            <div class="appt-meta">
+              <span class="appt-meta-item">📅 Qui, 26 Jun</span>
+              <span class="appt-meta-item">🕑 14:00</span>
+              <span class="appt-meta-item">💰 R$ 260</span>
+            </div>
+          </div>
+          <div class="appt-footer">
+            <span class="appt-action" onclick="event.stopPropagation();showToast('📋 Abrindo detalhes...')">Ver detalhes</span>
+            <span class="appt-action" onclick="event.stopPropagation();goTo(3)">Reagendar</span>
+            <span class="appt-action cancel" onclick="event.stopPropagation();showToast('❌ Agendamento cancelado')">Cancelar</span>
+          </div>
+        </div>
+
+        <div class="appt-card" onclick="showToast('📋 Detalhes do agendamento')">
+          <div class="appt-stripe gold"></div>
+          <div class="appt-inner">
+            <div class="appt-top">
+              <div><div class="appt-svc">Nail Art completo</div><div class="appt-prof">🧑 Beatriz Lima</div></div>
+              <div class="badge pending">Pendente</div>
+            </div>
+            <div class="appt-meta">
+              <span class="appt-meta-item">📅 Sáb, 28 Jun</span>
+              <span class="appt-meta-item">🕑 10:00</span>
+              <span class="appt-meta-item">💰 R$ 120</span>
+            </div>
+          </div>
+          <div class="appt-footer">
+            <span class="appt-action" onclick="event.stopPropagation();showToast('📋 Abrindo detalhes...')">Ver detalhes</span>
+            <span class="appt-action" onclick="event.stopPropagation();goTo(3)">Reagendar</span>
+            <span class="appt-action cancel" onclick="event.stopPropagation();showToast('❌ Agendamento cancelado')">Cancelar</span>
+          </div>
+        </div>
+
+        <div class="appt-card" onclick="showToast('📋 Detalhes do agendamento')">
+          <div class="appt-stripe gray"></div>
+          <div class="appt-inner">
+            <div class="appt-top">
+              <div><div class="appt-svc">Hidratação profunda</div><div class="appt-prof">👩 Camila Rocha</div></div>
+              <div class="badge done">Concluído</div>
+            </div>
+            <div class="appt-meta">
+              <span class="appt-meta-item">📅 Sex, 20 Jun</span>
+              <span class="appt-meta-item">🕑 11:00</span>
+              <span class="appt-meta-item">💰 R$ 90</span>
+            </div>
+          </div>
+          <div class="appt-footer">
+            <span class="appt-action" onclick="event.stopPropagation();showToast('📋 Abrindo detalhes...')">Ver detalhes</span>
+            <span class="appt-action" style="color:var(--gold)" onclick="event.stopPropagation();showToast('⭐ Obrigada pela avaliação!')">⭐ Avaliar</span>
+            <span class="appt-action" onclick="event.stopPropagation();goTo(3)">Reagendar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <div class="nav-item" onclick="goTo(1)"><div class="icon">🏠</div><span>Início</span></div>
+        <div class="nav-item" onclick="showToast('🔍 Busca em breve!')"><div class="icon">🔍</div><span>Buscar</span></div>
+        <div class="nav-item active"><div class="icon">📅</div><span>Agenda</span><div class="nav-dot"></div></div>
+        <div class="nav-item" onclick="showToast('👤 Perfil em breve!')"><div class="icon">👤</div><span>Perfil</span></div>
+      </div>
+    </div>
+
+  </div><!-- end screens-wrapper -->
+</div><!-- end phone -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+const screenLabels = {
+  1: "Tela 1 — Início",
+  2: "Tela 2 — Serviços",
+  3: "Tela 3 — Data e Horário",
+  4: "Tela 4 — Confirmação",
+  5: "Tela 5 — Meus Agendamentos"
+};
+
+const statusTimes = { 1:"9:41", 2:"9:43", 3:"9:45", 4:"9:47", 5:"9:50" };
+
+function goTo(n) {
+  // Hide all screens
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  // Show target
+  document.getElementById('screen-' + n).classList.add('active');
+  // Update label
+  document.getElementById('screen-label').textContent = screenLabels[n];
+  // Update dots
+  document.querySelectorAll('.screen-dot').forEach((d, i) => {
+    d.classList.toggle('active', i + 1 === n);
+  });
+  // Update status bar
+  document.getElementById('status-time').textContent = statusTimes[n];
+  const sb = document.getElementById('status-bar');
+  sb.className = 'status-bar' + (n === 4 ? ' dark' : '');
+  // Confirmation animation reset
+  if (n === 4) {
+    const check = document.querySelector('.s4-check');
+    check.style.animation = 'none';
+    setTimeout(() => { check.style.animation = ''; }, 10);
+  }
+}
+
+function selectCat(el) {
+  document.querySelectorAll('.s1-cat').forEach(c => c.classList.remove('active-cat'));
+  el.classList.add('active-cat');
+}
+
+function selectChip(el) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function toggleService(el) {
+  const sel = el.querySelector('.svc-sel');
+  const isChecked = sel.classList.toggle('checked');
+  sel.textContent = isChecked ? '✓' : '';
+  updateTotal();
+}
+
+function updateTotal() {
+  const prices = { "Corte feminino": 80, "Escova progressiva": 180, "Coloração raiz": 120, "Hidratação profunda": 90 };
+  const durations = { "Corte feminino": 45, "Escova progressiva": 90, "Coloração raiz": 60, "Hidratação profunda": 30 };
+  let total = 0, mins = 0, count = 0;
+  document.querySelectorAll('#screen-2 .service-item').forEach(item => {
+    if (item.querySelector('.svc-sel.checked')) {
+      const name = item.querySelector('.svc-name').textContent;
+      total += prices[name] || 0;
+      mins += durations[name] || 0;
+      count++;
+    }
+  });
+  const h = Math.floor(mins / 60), m = mins % 60;
+  const dur = h > 0 ? `${h}h ${m > 0 ? m + 'min' : ''}`.trim() : `${m}min`;
+  document.getElementById('svc-count').textContent = `${count} serviço${count !== 1 ? 's' : ''} • ${dur}`;
+  document.getElementById('svc-total').textContent = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+}
+
+function selectDay(el) {
+  document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+  const dow = el.querySelector('.dow').textContent;
+  const num = el.querySelector('.num').textContent;
+  const map = { SEG:'Seg', TER:'Ter', QUA:'Qua', QUI:'Qui', SEX:'Sex', SÁB:'Sáb' };
+  document.getElementById('day-label').textContent = `${map[dow] || dow}, ${num} Jun`;
+  const selSlot = document.querySelector('.slot.selected');
+  if (selSlot) {
+    document.getElementById('selected-time').textContent = `${map[dow] || dow}, ${num} Jun • ${selSlot.textContent}`;
+  }
+}
+
+function selectSlot(el) {
+  if (el.classList.contains('taken')) return;
+  document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  const activeDay = document.querySelector('.cal-day.active');
+  const dow = activeDay ? activeDay.querySelector('.dow').textContent : 'Qui';
+  const num = activeDay ? activeDay.querySelector('.num').textContent : '26';
+  const map = { SEG:'Seg', TER:'Ter', QUA:'Qua', QUI:'Qui', SEX:'Sex', SÁB:'Sáb' };
+  document.getElementById('selected-time').textContent = `${map[dow] || dow}, ${num} Jun • ${el.textContent}`;
+}
+
+function selectTab(el) {
+  document.querySelectorAll('.s5-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  showToast('📂 ' + el.textContent);
+}
+
+let toastTimer;
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
