@@ -525,30 +525,8 @@
 </style>
 </head>
 <body>
-
-<div class="app-title">ArtBrilho - GlowBook — Mockup</div>
-
-<div class="screen-indicator">
-  <div class="screen-dot active" onclick="goTo(1)"></div>
-  <div class="screen-dot" onclick="goTo(2)"></div>
-  <div class="screen-dot" onclick="goTo(3)"></div>
-  <div class="screen-dot" onclick="goTo(4)"></div>
-  <div class="screen-dot" onclick="goTo(5)"></div>
-</div>
-
-<div class="screen-tag" id="screen-label">Tela 1 — Início</div>
-
-<div class="phone">
-
-  <!-- STATUS BAR (dinâmica) -->
-  <div class="status-bar" id="status-bar">
-    <span id="status-time">9:41</span>
-    <div class="status-icons"><span>●●●</span><span>WiFi</span><span>🔋</span></div>
-  </div>
-
-  <div class="screens-wrapper">
-
-    <!-- ══ TELA 1: HOME ══ -->
+<div class="screens-wrapper">
+   <!-- ══ TELA 1: HOME ══ -->
     <div class="screen active" id="screen-1">
       <div class="s1-header">
         <div class="s1-greeting">Olá, Ana 👋</div>
@@ -865,10 +843,6 @@
         <div class="nav-item" onclick="showToast('👤 Perfil em breve!')"><div class="icon">👤</div><span>Perfil</span></div>
       </div>
     </div>
-
-  </div><!-- end screens-wrapper -->
-</div><!-- end phone -->
-
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
@@ -880,8 +854,6 @@ const screenLabels = {
   4: "Tela 4 — Confirmação",
   5: "Tela 5 — Meus Agendamentos"
 };
-
-const statusTimes = { 1:"9:41", 2:"9:43", 3:"9:45", 4:"9:47", 5:"9:50" };
 
 function goTo(n) {
   // Hide all screens
@@ -895,7 +867,6 @@ function goTo(n) {
     d.classList.toggle('active', i + 1 === n);
   });
   // Update status bar
-  document.getElementById('status-time').textContent = statusTimes[n];
   const sb = document.getElementById('status-bar');
   sb.className = 'status-bar' + (n === 4 ? ' dark' : '');
   // Confirmation animation reset
