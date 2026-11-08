@@ -506,6 +506,31 @@
   .appt-action:hover { text-decoration: underline; }
   .appt-action.cancel { color: #E74C3C; }
 
+  /* ════════════ SCREEN 6 — PERFIL ════════════ */
+  .s6-header { background: linear-gradient(160deg, #3D2B2E 0%, #6B3A42 100%); padding: 18px 20px 24px; border-radius: 0 0 26px 26px; color: #fff; }
+  .s6-top { display: flex; align-items: center; justify-content: space-between; }
+  .s6-gear { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .s6-user { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+  .s6-avatar { width: 68px; height: 68px; border-radius: 50%; background: #FDEBD0; display: flex; align-items: center; justify-content: center; font-size: 32px; border: 3px solid rgba(255,255,255,0.3); flex-shrink: 0; }
+  .s6-name { font-size: 19px; font-weight: 700; }
+  .s6-badge { display: inline-block; margin-top: 6px; background: rgba(255,255,255,0.14); padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; color: #F0D9CE; }
+  .s6-edit { margin-top: 16px; background: #fff; color: var(--rose-dark); border-radius: 12px; padding: 11px; text-align: center; font-size: 14px; font-weight: 700; }
+  .s6-body { padding: 18px 20px 0; }
+  .s6-stats { display: flex; gap: 10px; margin-bottom: 20px; }
+  .s6-stat { flex: 1; background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 12px 6px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .s6-stat-num { font-size: 20px; font-weight: 800; color: var(--rose-dark); }
+  .s6-stat-lbl { font-size: 10px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+  .s6-info { background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .s6-info-row { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-bottom: 1px solid var(--border); }
+  .s6-info-row:last-child { border-bottom: none; }
+  .s6-info-ico { font-size: 16px; width: 20px; text-align: center; }
+  .s6-info-k { font-size: 11px; color: var(--muted); }
+  .s6-info-v { font-size: 14px; font-weight: 600; color: var(--text); }
+  .s6-menu { background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .s6-menu-row { display: flex; align-items: center; justify-content: space-between; padding: 14px; font-size: 14px; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border); }
+  .s6-menu-row:last-child { border-bottom: none; }
+  .s6-chev { color: var(--muted); font-size: 18px; }
+
   /* ── TOAST ── */
   .toast {
     position: fixed;
@@ -598,7 +623,7 @@
         <div class="nav-item active" onclick="goTo(1)"><div class="icon">🏠</div><span>Início</span><div class="nav-dot"></div></div>
         <div class="nav-item" onclick="showToast('🔍 Busca em breve!')"><div class="icon">🔍</div><span>Buscar</span></div>
         <div class="nav-item" onclick="goTo(5)"><div class="icon">📅</div><span>Agenda</span></div>
-        <div class="nav-item" onclick="showToast('👤 Perfil em breve!')"><div class="icon">👤</div><span>Perfil</span></div>
+        <div class="nav-item" onclick="goTo(6)"><div class="icon">👤</div><span>Perfil</span></div>
       </div>
     </div>
 
@@ -665,7 +690,7 @@
         <div class="nav-item" onclick="goTo(1)"><div class="icon">🏠</div><span>Início</span></div>
         <div class="nav-item" onclick="showToast('🔍 Busca em breve!')"><div class="icon">🔍</div><span>Buscar</span></div>
         <div class="nav-item active" onclick="goTo(5)"><div class="icon">📅</div><span>Agenda</span><div class="nav-dot"></div></div>
-        <div class="nav-item" onclick="showToast('👤 Perfil em breve!')"><div class="icon">👤</div><span>Perfil</span></div>
+        <div class="nav-item" onclick="goTo(6)"><div class="icon">👤</div><span>Perfil</span></div>
       </div>
     </div>
 
@@ -719,7 +744,7 @@
         <div class="nav-item" onclick="goTo(1)"><div class="icon">🏠</div><span>Início</span></div>
         <div class="nav-item" onclick="showToast('🔍 Busca em breve!')"><div class="icon">🔍</div><span>Buscar</span></div>
         <div class="nav-item active"><div class="icon">📅</div><span>Agenda</span><div class="nav-dot"></div></div>
-        <div class="nav-item" onclick="showToast('👤 Perfil em breve!')"><div class="icon">👤</div><span>Perfil</span></div>
+        <div class="nav-item" onclick="goTo(6)"><div class="icon">👤</div><span>Perfil</span></div>
       </div>
     </div>
 
@@ -758,7 +783,7 @@
         <div class="nav-item" onclick="goTo(1)"><div class="icon">🏠</div><span>Início</span></div>
         <div class="nav-item" onclick="showToast('🔍 Busca em breve!')"><div class="icon">🔍</div><span>Buscar</span></div>
         <div class="nav-item active" onclick="goTo(5)"><div class="icon">📅</div><span>Agenda</span><div class="nav-dot"></div></div>
-        <div class="nav-item" onclick="showToast('👤 Perfil em breve!')"><div class="icon">👤</div><span>Perfil</span></div>
+        <div class="nav-item" onclick="goTo(6)"><div class="icon">👤</div><span>Perfil</span></div>
       </div>
     </div>
 
@@ -842,9 +867,72 @@
         <div class="nav-item" onclick="goTo(1)"><div class="icon">🏠</div><span>Início</span></div>
         <div class="nav-item" onclick="showToast('🔍 Busca em breve!')"><div class="icon">🔍</div><span>Buscar</span></div>
         <div class="nav-item active"><div class="icon">📅</div><span>Agenda</span><div class="nav-dot"></div></div>
-        <div class="nav-item" onclick="showToast('👤 Perfil em breve!')"><div class="icon">👤</div><span>Perfil</span></div>
+        <div class="nav-item" onclick="goTo(6)"><div class="icon">👤</div><span>Perfil</span></div>
       </div>
     </div>
+    <!-- ══ TELA 6: PERFIL ══ -->
+    <div class="screen" id="screen-6">
+      <div class="s6-header">
+        <div class="s6-top">
+          <div class="section-label" style="color:rgba(255,255,255,0.6);margin:0">Meu perfil</div>
+          <div class="s6-gear clickable" onclick="showToast('⚙️ Configurações')">⚙️</div>
+        </div>
+        <div class="s6-user">
+          <div class="s6-avatar">👩</div>
+          <div>
+            <div class="s6-name">Ana Beatriz Souza</div>
+            <div class="s6-badge">⭐ Membro Premium • desde 2024</div>
+          </div>
+        </div>
+        <div class="s6-edit clickable" onclick="showToast('✏️ Editar perfil')">Editar perfil</div>
+      </div>
+
+      <div class="s6-body">
+        <div class="s6-stats">
+          <div class="s6-stat"><div class="s6-stat-num">12</div><div class="s6-stat-lbl">Agendamentos</div></div>
+          <div class="s6-stat"><div class="s6-stat-num">4</div><div class="s6-stat-lbl">Favoritos</div></div>
+          <div class="s6-stat"><div class="s6-stat-num" style="color:var(--gold)">4.9</div><div class="s6-stat-lbl">Avaliação</div></div>
+        </div>
+
+        <div class="section-label">Meus dados</div>
+        <div class="s6-info">
+          <div class="s6-info-row"><span class="s6-info-ico">✉️</span><div><div class="s6-info-k">E-mail</div><div class="s6-info-v">ana.souza@email.com</div></div></div>
+          <div class="s6-info-row"><span class="s6-info-ico">📱</span><div><div class="s6-info-k">Telefone</div><div class="s6-info-v">+55 11 98063-2227</div></div></div>
+          <div class="s6-info-row"><span class="s6-info-ico">📍</span><div><div class="s6-info-k">Endereço</div><div class="s6-info-v">R. São Jorge, 777 • Vila Moreira</div></div></div>
+        </div>
+
+        <div class="section-label" style="margin-top:18px">Profissionais favoritos</div>
+        <div class="s1-profs">
+          <div class="prof-card" onclick="goTo(2)">
+            <div class="prof-avatar" style="background:#FDEBD0;">👩</div>
+            <div><div class="prof-name">Camila Rocha</div><div class="prof-spec">Cabelo • Coloração</div><div class="prof-stars">★★★★★ 4.9</div></div>
+            <div class="prof-avail">Hoje livre</div>
+          </div>
+          <div class="prof-card" onclick="goTo(2)">
+            <div class="prof-avatar" style="background:#D5EAF5;">👩</div>
+            <div><div class="prof-name">Fernanda Costa</div><div class="prof-spec">Estética • Sobrancelha</div><div class="prof-stars">★★★★★ 5.0</div></div>
+            <div class="prof-avail">Hoje livre</div>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top:18px">Configurações</div>
+        <div class="s6-menu">
+          <div class="s6-menu-row clickable" onclick="showToast('🔔 Notificações')"><span>🔔 Notificações</span><span class="s6-chev">›</span></div>
+          <div class="s6-menu-row clickable" onclick="showToast('💳 Pagamentos')"><span>💳 Pagamentos</span><span class="s6-chev">›</span></div>
+          <div class="s6-menu-row clickable" onclick="showToast('🔒 Privacidade')"><span>🔒 Privacidade</span><span class="s6-chev">›</span></div>
+          <div class="s6-menu-row clickable" onclick="showToast('🚪 Até logo, Ana!')"><span style="color:#E74C3C">🚪 Sair</span></div>
+        </div>
+      </div>
+
+      <div style="height:16px"></div>
+      <div class="nav-bar">
+        <div class="nav-item" onclick="goTo(1)"><div class="icon">🏠</div><span>Início</span></div>
+        <div class="nav-item" onclick="showToast('🔍 Busca em breve!')"><div class="icon">🔍</div><span>Buscar</span></div>
+        <div class="nav-item" onclick="goTo(5)"><div class="icon">📅</div><span>Agenda</span></div>
+        <div class="nav-item active"><div class="icon">👤</div><span>Perfil</span><div class="nav-dot"></div></div>
+      </div>
+    </div>
+
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
@@ -854,7 +942,8 @@ const screenLabels = {
   2: "Tela 2 — Serviços",
   3: "Tela 3 — Data e Horário",
   4: "Tela 4 — Confirmação",
-  5: "Tela 5 — Meus Agendamentos"
+  5: "Tela 5 — Meus Agendamentos",
+  6: "Tela 6 — Perfil"
 };
 
 function goTo(n) {
@@ -863,14 +952,17 @@ function goTo(n) {
   // Show target
   document.getElementById('screen-' + n).classList.add('active');
   // Update label
-  document.getElementById('screen-label').textContent = screenLabels[n];
+  const lbl = document.getElementById('screen-label');
+  if (lbl) lbl.textContent = screenLabels[n];
   // Update dots
   document.querySelectorAll('.screen-dot').forEach((d, i) => {
     d.classList.toggle('active', i + 1 === n);
   });
   // Update status bar
   const sb = document.getElementById('status-bar');
-  sb.className = 'status-bar' + (n === 4 ? ' dark' : '');
+  if (sb) sb.className = 'status-bar' + (n === 4 ? ' dark' : '');
+  // Scroll back to top on screen change
+  window.scrollTo({ top: 0 });
   // Confirmation animation reset
   if (n === 4) {
     const check = document.querySelector('.s4-check');
